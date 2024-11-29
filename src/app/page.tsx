@@ -1,101 +1,131 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const maxStep = 3;
+  const [stepInForm, setStepInForm] = useState<number>(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+  return (
+    <main className="w-full h-full min-h-screen flex items-center justify-center bg-zinc-950">
+      <Card className="w-[50svw] max-h-[90svh]">
+        <CardHeader className="bg-zinc-50 rounded-t-md relative">
+          <Progress
+            value={(stepInForm / maxStep) * 100}
+            className="absolute -top-[1px] left-0 w-full m-0 rounded-none rounded-t-md"
+          />
+          <div className="flex items-center justify-center gap-4">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/logo-blason-or.svg"
+              width={60}
+              height={60}
+              alt="Logo SolarCar"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <div>
+              <CardTitle className="">Réservation d&apos;un créneau</CardTitle>
+              <CardDescription className="text-xs text-muted-foreground">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+                tincidunt, dolor in ultricies ultricies, purus nisl consectetur
+                libero, et luctus mi ligula
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <Separator />
+        <CardContent className="p-8">
+          <p className="text-xs text-muted-foreground">
+            Étape {stepInForm + 1} / {maxStep + 1}
+          </p>
+        </CardContent>
+        <Separator />
+        <CardFooter className="bg-zinc-50 rounded-b-md py-6">
+          <div className="flex w-full gap-4">
+            {stepInForm === 0 && <ButtonReturnHome />}
+            {stepInForm > 0 && (
+              <ButtonPreviousStep
+                stepInForm={stepInForm}
+                setStepInForm={setStepInForm}
+              />
+            )}
+            {stepInForm === maxStep ? (
+              <ButtonSubmitForm />
+            ) : (
+              <ButtonNextStep
+                stepInForm={stepInForm}
+                setStepInForm={setStepInForm}
+              />
+            )}
+          </div>
+        </CardFooter>
+      </Card>
+    </main>
   );
 }
+
+const ButtonNextStep = ({
+  stepInForm,
+  setStepInForm,
+}: {
+  stepInForm: number;
+  setStepInForm: (stepInForm: number) => void;
+}) => {
+  return (
+    <Button
+      variant={"default"}
+      size={"sm"}
+      className="w-full group"
+      onClick={() => setStepInForm(stepInForm + 1)}>
+      Étape suivante
+      <LucideArrowRight className="mr-2 size-3 group-hover:-translate-x-2 transition-all" />
+    </Button>
+  );
+};
+
+const ButtonPreviousStep = ({
+  stepInForm,
+  setStepInForm,
+}: {
+  stepInForm: number;
+  setStepInForm: (stepInForm: number) => void;
+}) => {
+  return (
+    <Button
+      variant={"outline"}
+      size={"sm"}
+      className="w-full group"
+      onClick={() => setStepInForm(stepInForm - 1)}>
+      <LucideArrowLeft className="mr-2 size-3 group-hover:translate-x-2 transition-all" />
+      Étape précédente
+    </Button>
+  );
+};
+
+const ButtonSubmitForm = () => {
+  return (
+    <Button variant={"primary"} size={"sm"} className="w-full">
+      Réserver
+    </Button>
+  );
+};
+
+const ButtonReturnHome = () => {
+  return (
+    <Button variant={"outline"} size={"sm"} className="w-full group">
+      <LucideArrowLeft className="mr-2 size-3 group-hover:translate-x-1 transition-all" />
+      Retour à la homepage
+    </Button>
+  );
+};
